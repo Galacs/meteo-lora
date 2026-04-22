@@ -13,4 +13,4 @@
   // static_assert(std::is_trivially_copyable<struct_name>::value,                \
   //               #struct_name " must be trivially copyable")
 
-LORA_STRUCT(weather_data_t, 10, int temperature; int pressure;);
+LORA_STRUCT(weather_data_t, 10, float temperature; float pressure;);
