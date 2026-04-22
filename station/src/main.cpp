@@ -64,8 +64,8 @@ void loop() {
     // Should be a message for us now
     // uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
     weather_data_t msg;
-    msg.humidity = sensor.readHumidity();
-    msg.temperature = sensor.readTemperature();
+    msg.si7021_humidity = sensor.readHumidity();
+    msg.si7021_temperature = sensor.readTemperature();
 
     // uint8_t *phrase = "salut";
     // memcpy(phrase, msg.buf, 6);
@@ -92,21 +92,8 @@ void loop() {
     // } else {
     //   Serial.println("recv failed");
     // }
-  }
-  Serial.println("Waiting...");
-  delay(100);
-}
 
-void capteur_board(){
-  Serial.print("Humidity:    ");
-  Serial.print(sensor.readHumidity(), 2);
-  Serial.print("\tTemperature: ");
-  Serial.println(sensor.readTemperature(), 2);
-
-
-  // Toggle heater enabled state every 30 seconds
-  // An ~1.8 degC temperature increase can be noted when heater is enabled
-  if (++loopCnt == 30) {
+    if (++loopCnt == 30) {
     enableHeater = !enableHeater;
     sensor.heater(enableHeater);
     Serial.print("Heater Enabled State: ");
@@ -116,5 +103,9 @@ void capteur_board(){
       Serial.println("DISABLED");
        
     loopCnt = 0;
+    }
+  Serial.println("Waiting...");
+  delay(100);
   }
 }
+
