@@ -1,5 +1,8 @@
 #include <Arduino.h>
 #include <RH_RF95.h>
+
+#include "messages.h"
+
 #include <SPI.h>
 // Singleton instance of the radio driver
 RH_RF95 rf95;
@@ -30,11 +33,11 @@ void setup() {
   Serial.println(frequency);
 }
 
-struct __attribute__((packed)) msg_t {
-  uint8_t buf[RH_RF95_MAX_MESSAGE_LEN - sizeof(int) - sizeof(int16_t)];
-  int lastSNR;
-  int16_t lastRSSI;
-};
+// struct __attribute__((packed)) msg_t {
+//   uint8_t buf[RH_RF95_MAX_MESSAGE_LEN - sizeof(int) - sizeof(int16_t)];
+//   int lastSNR;
+//   int16_t lastRSSI;
+// };
 
 void loop() {
   // if (rf95.available()) {
@@ -45,12 +48,11 @@ void loop() {
     Serial.println("Sent a reply");*/
     // Should be a message for us now
     // uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
-    msg_t msg = {"aaaaaa", 10, 10};
+    weather_data_t msg;
+
     // uint8_t *phrase = "salut";
     // memcpy(phrase, msg.buf, 6);
     // strcpy(phrase, msg.buf);
-    msg.lastSNR = rf95.lastSNR();
-    msg.lastRSSI = rf95.lastRssi();
     uint8_t len = sizeof(msg);
     // if (rf95.recv((uint8_t *)&msg, &len)) {
     // RH_RF95::printBuffer("request: ", buf, len);

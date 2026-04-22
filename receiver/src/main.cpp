@@ -44,19 +44,16 @@ void loop() {
     Serial.println("Sent a reply");*/
     // Should be a message for us now
     // uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
-    msg_t buf;
     msg_t msg;
-    uint8_t *phrase = "salut";
     // memcpy(phrase, msg.buf, 6);
-    strcpy(phrase, msg.buf);
-    msg.lastSNR = rf95.lastSNR();
-    msg.lastRSSI = rf95.lastRssi();
     uint8_t len = sizeof(msg);
     if (rf95.recv((uint8_t *)&msg, &len)) {
       // RH_RF95::printBuffer("request: ", buf, len);
       Serial.print("got request: ");
-      String a = String((char *)buf.buf);
-      Serial.println(a);
+      String a = String((char *)msg.buf);
+      // Serial.printf("Values: %d, %d\n", msg.lastRSSI, msg.lastSNR);
+      Serial.println(msg.lastRSSI);
+      Serial.println(msg.lastSNR);
       Serial.print((" with an SNR of: "));
       Serial.print(rf95.lastSNR());
       Serial.print((" an RRSI of: "));
@@ -68,7 +65,6 @@ void loop() {
     // rf95.send((uint8_t *)&msg, sizeof(msg));
     // Serial.println(("sent"));
     // rf95.waitPacketSent();
-    delay(1000);
     // Serial.println("Sent a reply");
 
     // } else {
