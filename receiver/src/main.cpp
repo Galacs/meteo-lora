@@ -55,8 +55,6 @@ void loop() {
       Serial.println(msg.mpl_temperature);
       Serial.print("MPL Pression: ");
       Serial.println(msg.mpl_pressure);
-      Serial.print((" with an SNR of: "));
-
       Serial.print("Wind direction: ");
       Serial.println(msg.wind_direction);
       Serial.print("Wind speed: ");
