@@ -4,7 +4,7 @@
 #include "messages.h"
 
 #include <SPI.h>
-#include "Adafruit_Si7021.h"
+#include <Adafruit_Si7021.h>
 
 bool enableHeater = false;
 uint8_t loopCnt = 0;
@@ -64,8 +64,8 @@ void loop() {
     // Should be a message for us now
     // uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
     weather_data_t msg;
-    msg.pressure = 123;
-    msg.temperature = 69;
+    msg.humidity = sensor.readHumidity();
+    msg.temperature = sensor.readTemperature();
 
     // uint8_t *phrase = "salut";
     // memcpy(phrase, msg.buf, 6);
@@ -97,12 +97,12 @@ void loop() {
   delay(100);
 }
 
-void temperature(){
+void capteur_board(){
   Serial.print("Humidity:    ");
   Serial.print(sensor.readHumidity(), 2);
   Serial.print("\tTemperature: ");
   Serial.println(sensor.readTemperature(), 2);
-  delay(1000);
+
 
   // Toggle heater enabled state every 30 seconds
   // An ~1.8 degC temperature increase can be noted when heater is enabled
