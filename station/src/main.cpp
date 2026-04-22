@@ -6,13 +6,17 @@
 #include <SPI.h>
 #include <Adafruit_Si7021.h>
 #include <SparkFunMPL3115A2.h>
+#include <SparkFun_Weather_Meter_Kit_Arduino_Library.h>
 
 bool enableHeater = false;
 uint8_t loopCnt = 0;
 
 Adafruit_Si7021 sensor = Adafruit_Si7021();
 MPL3115A2 myPressure;
-
+int windDirectionPin = A0;
+int windSpeedPin = 3;
+int rainfallPin = 2;
+SFEWeatherMeterKit weatherMeterKit(windDirectionPin, windSpeedPin, rainfallPin);
 // Singleton instance of the radio driver
 RH_RF95 rf95;
 float frequency = 868.1;
@@ -56,6 +60,7 @@ if (!sensor.begin()) {
   myPressure.setOversampleRate(7); // Set Oversample to the recommended 128
   myPressure.enableEventFlags(); // Enable all three pressure and temp event flags 
 
+  weatherMeterKit.begin();
 
 }
 
@@ -80,7 +85,13 @@ void loop() {
     msg.mpl_pressure = myPressure.readPressure();
     msg.mpl_temperature = myPressure.readTemp();
 
-    
+    msg.wind_direction = weatherMeterKit.getWindDirection();
+    msg.wind_speed = weatherMeterKit.getWindSpeed();
+    msg.rain_fall = weatherMeterKit.getTotalRainfall();
+
+
+    // Only print once per second
+    delay(1000);
 
     // uint8_t *phrase = "salut";
     // memcpy(phrase, msg.buf, 6);
