@@ -5,11 +5,13 @@
 
 #include <SPI.h>
 #include <Adafruit_Si7021.h>
+#include <SparkFunMPL3115A2.h>
 
 bool enableHeater = false;
 uint8_t loopCnt = 0;
 
 Adafruit_Si7021 sensor = Adafruit_Si7021();
+MPL3115A2 myPressure;
 
 // Singleton instance of the radio driver
 RH_RF95 rf95;
@@ -46,6 +48,15 @@ if (!sensor.begin()) {
   }
 
 
+
+  myPressure.begin(); // Get sensor online
+
+  myPressure.setModeBarometer(); // Measure pressure in Pascals from 20 to 110 kPa
+  
+  myPressure.setOversampleRate(7); // Set Oversample to the recommended 128
+  myPressure.enableEventFlags(); // Enable all three pressure and temp event flags 
+
+
 }
 
 // struct __attribute__((packed)) msg_t {
@@ -66,6 +77,10 @@ void loop() {
     weather_data_t msg;
     msg.si7021_humidity = sensor.readHumidity();
     msg.si7021_temperature = sensor.readTemperature();
+    msg.mpl_pressure = myPressure.readPressure();
+    msg.mpl_temperature = myPressure.readTemp();
+
+    
 
     // uint8_t *phrase = "salut";
     // memcpy(phrase, msg.buf, 6);
