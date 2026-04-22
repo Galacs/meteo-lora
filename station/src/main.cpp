@@ -49,6 +49,8 @@ void loop() {
     // Should be a message for us now
     // uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
     weather_data_t msg;
+    msg.pressure = 123;
+    msg.temperature = 69;
 
     // uint8_t *phrase = "salut";
     // memcpy(phrase, msg.buf, 6);
