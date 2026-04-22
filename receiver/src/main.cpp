@@ -50,11 +50,19 @@ void loop() {
       Serial.println(msg.si7021_temperature);
       Serial.print("SI Humidité: ");
       Serial.println(msg.si7021_humidity);
+
       Serial.print("MPL Temperature: ");
       Serial.println(msg.mpl_temperature);
       Serial.print("MPL Pression: ");
       Serial.println(msg.mpl_pressure);
       Serial.print((" with an SNR of: "));
+
+      Serial.print("Wind direction: ");
+      Serial.println(msg.wind_direction);
+      Serial.print("Wind speed: ");
+      Serial.println(msg.wind_speed);
+      Serial.print((" with an SNR of: "));
+
       Serial.print(rf95.lastSNR());
       Serial.print((" an RRSI of: "));
       Serial.println(rf95.lastRssi());
