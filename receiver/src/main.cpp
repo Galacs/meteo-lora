@@ -46,8 +46,14 @@ void loop() {
     if (rf95.recv((uint8_t *)&msg, &len)) {
       // RH_RF95::printBuffer("request: ", buf, len);
       // Serial.printf("Values: %d, %d\n", msg.lastRSSI, msg.lastSNR);
-      Serial.println(msg.temperature);
-      Serial.println(msg.pressure);
+      Serial.print("SI Temperature: ");
+      Serial.println(msg.si7021_temperature);
+      Serial.print("SI Humidité: ");
+      Serial.println(msg.si7021_humidity);
+      Serial.print("DHT22 Temperature: ");
+      Serial.println(msg.dht22_temperature);
+      Serial.print("DHT22 Humidité: ");
+      Serial.println(msg.dht22_humidity);
       Serial.print((" with an SNR of: "));
       Serial.print(rf95.lastSNR());
       Serial.print((" an RRSI of: "));
