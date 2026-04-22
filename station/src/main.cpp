@@ -22,6 +22,7 @@ RH_RF95 rf95;
 float frequency = 868.1;
 void setup() {
 
+  weatherMeterKit.begin();
   Serial.begin(115200);
   while (!Serial)
     ; // Wait for serial port to be available
@@ -59,8 +60,10 @@ if (!sensor.begin()) {
   
   myPressure.setOversampleRate(7); // Set Oversample to the recommended 128
   myPressure.enableEventFlags(); // Enable all three pressure and temp event flags 
+  
 
-  weatherMeterKit.begin();
+
+
 
 }
 
@@ -96,7 +99,7 @@ void loop() {
     // uint8_t *phrase = "salut";
     // memcpy(phrase, msg.buf, 6);
     // strcpy(phrase, msg.buf);
-    uint8_t len = sizeof(msg);
+    // uint8_t len = sizeof(msg);
     // if (rf95.recv((uint8_t *)&msg, &len)) {
     // RH_RF95::printBuffer("request: ", buf, len);
     // Serial.print("got request: ");
@@ -110,8 +113,8 @@ void loop() {
     // Send a reply
     // uint8_t data[] = "english or spanish ?";
     rf95.send((uint8_t *)&msg, sizeof(msg));
-    Serial.println(("sent"));
     rf95.waitPacketSent();
+    Serial.println(("sent"));
     delay(1000);
     // Serial.println("Sent a reply");
 
