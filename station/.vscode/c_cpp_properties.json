@@ -10,6 +10,9 @@
             "includePath": [
                 "/home/galacs/meteo-lora/station/include",
                 "/home/galacs/meteo-lora/station/src",
+                "/home/galacs/meteo-lora/station/.pio/libdeps/uno/Adafruit Si7021 Library",
+                "/home/galacs/meteo-lora/station/.pio/libdeps/uno/Adafruit BusIO",
+                "/home/galacs/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
                 "/home/galacs/meteo-lora/common/src",
                 "/home/galacs/meteo-lora/station/.pio/libdeps/uno/RadioHead",
                 "/home/galacs/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
@@ -18,7 +21,6 @@
                 "/home/galacs/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
                 "/home/galacs/.platformio/packages/framework-arduino-avr/libraries/HID/src",
                 "/home/galacs/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
-                "/home/galacs/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
                 ""
             ],
             "browse": {
@@ -26,6 +28,9 @@
                 "path": [
                     "/home/galacs/meteo-lora/station/include",
                     "/home/galacs/meteo-lora/station/src",
+                    "/home/galacs/meteo-lora/station/.pio/libdeps/uno/Adafruit Si7021 Library",
+                    "/home/galacs/meteo-lora/station/.pio/libdeps/uno/Adafruit BusIO",
+                    "/home/galacs/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
                     "/home/galacs/meteo-lora/common/src",
                     "/home/galacs/meteo-lora/station/.pio/libdeps/uno/RadioHead",
                     "/home/galacs/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
@@ -34,7 +39,6 @@
                     "/home/galacs/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
                     "/home/galacs/.platformio/packages/framework-arduino-avr/libraries/HID/src",
                     "/home/galacs/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
-                    "/home/galacs/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
                     ""
                 ]
             },
