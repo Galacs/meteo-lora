@@ -7,7 +7,7 @@ struct __attribute__((packed)) weather_data_t {
   static constexpr int ID = 10;
   float si7021_temperature;
   float si7021_humidity;
-  float dht22_temperature;
-  float dht22_humidity;
+  float mpl_pressure;
+  float mpl_temperature;
 };
 static_assert(sizeof(weather_data_t) <= (255 - 4), "weather_data_t exceeds lora frame size (??)");
