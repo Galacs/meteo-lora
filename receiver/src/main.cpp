@@ -61,16 +61,19 @@ void loop() {
       Serial.print(rf95.lastSNR());
       Serial.print((" an RRSI of: "));
       Serial.println(rf95.lastRssi());
-
-      // Send a reply
-      // uint8_t data[] = "english or spanish ?";
-      rf95.send((uint8_t *)&msg, sizeof(msg));
-      Serial.println(("sent"));
-      rf95.waitPacketSent();
-      // Serial.println("Sent a reply");
-
-    } else {
-      Serial.println("recv failed");
     }
+
+    // Send a reply
+    // uint8_t data[] = "english or spanish ?";
+    // rf95.send((uint8_t *)&msg, sizeof(msg));
+    // Serial.println(("sent"));
+    // rf95.waitPacketSent();
+    delay(1000);
+    // Serial.println("Sent a reply");
+
+    // } else {
+    //   Serial.println("recv failed");
+    // }
   }
+  delay(10);
 }

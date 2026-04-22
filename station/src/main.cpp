@@ -52,25 +52,27 @@ void loop() {
     msg.lastSNR = rf95.lastSNR();
     msg.lastRSSI = rf95.lastRssi();
     uint8_t len = sizeof(msg);
-    if (rf95.recv((uint8_t *)&msg, &len)) {
-      // RH_RF95::printBuffer("request: ", buf, len);
-      Serial.print("got request: ");
-      String a = String((char *)buf.buf);
-      Serial.println(a);
-      Serial.print((" with an SNR of: "));
-      Serial.print(rf95.lastSNR());
-      Serial.print((" an RRSI of: "));
-      Serial.println(rf95.lastRssi());
+    // if (rf95.recv((uint8_t *)&msg, &len)) {
+    // RH_RF95::printBuffer("request: ", buf, len);
+    // Serial.print("got request: ");
+    // String a = String((char *)buf.buf);
+    // Serial.println(a);
+    // Serial.print((" with an SNR of: "));
+    // Serial.print(rf95.lastSNR());
+    // Serial.print((" an RRSI of: "));
+    // Serial.println(rf95.lastRssi());
 
-      // Send a reply
-      // uint8_t data[] = "english or spanish ?";
-      rf95.send((uint8_t *)&msg, sizeof(msg));
-      Serial.println(("sent"));
-      rf95.waitPacketSent();
-      // Serial.println("Sent a reply");
+    // Send a reply
+    // uint8_t data[] = "english or spanish ?";
+    rf95.send((uint8_t *)&msg, sizeof(msg));
+    Serial.println(("sent"));
+    rf95.waitPacketSent();
+    delay(1000);
+    // Serial.println("Sent a reply");
 
-    } else {
-      Serial.println("recv failed");
-    }
+    // } else {
+    //   Serial.println("recv failed");
+    // }
   }
+  delay(10);
 }
