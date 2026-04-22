@@ -37,18 +37,18 @@ struct __attribute__((packed)) msg_t {
 };
 
 void loop() {
-  if (rf95.available()) {
+  // if (rf95.available()) {
+  if (true) {
     /*uint8_t data[] = "english or spanish ?";
     rf95.send(data, sizeof(data));
     rf95.waitPacketSent();
     Serial.println("Sent a reply");*/
     // Should be a message for us now
     // uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
-    msg_t buf;
-    msg_t msg;
-    uint8_t *phrase = "salut";
+    msg_t msg = {"aaaaaa", 10, 10};
+    // uint8_t *phrase = "salut";
     // memcpy(phrase, msg.buf, 6);
-    strcpy(phrase, msg.buf);
+    // strcpy(phrase, msg.buf);
     msg.lastSNR = rf95.lastSNR();
     msg.lastRSSI = rf95.lastRssi();
     uint8_t len = sizeof(msg);
@@ -74,5 +74,6 @@ void loop() {
     //   Serial.println("recv failed");
     // }
   }
-  delay(10);
+  Serial.println("Waiting...");
+  delay(100);
 }
