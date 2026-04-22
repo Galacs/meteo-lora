@@ -4,6 +4,13 @@
 #include "messages.h"
 
 #include <SPI.h>
+#include "Adafruit_Si7021.h"
+
+bool enableHeater = false;
+uint8_t loopCnt = 0;
+
+Adafruit_Si7021 sensor = Adafruit_Si7021();
+
 // Singleton instance of the radio driver
 RH_RF95 rf95;
 float frequency = 868.1;
@@ -31,6 +38,14 @@ void setup() {
 
   Serial.print("Listening on frequency: ");
   Serial.println(frequency);
+
+if (!sensor.begin()) {
+    Serial.println("Did not find Si7021 sensor!");
+    while (true)
+      ;
+  }
+
+
 }
 
 // struct __attribute__((packed)) msg_t {
@@ -78,4 +93,26 @@ void loop() {
   }
   Serial.println("Waiting...");
   delay(100);
+}
+
+void temperature(){
+  Serial.print("Humidity:    ");
+  Serial.print(sensor.readHumidity(), 2);
+  Serial.print("\tTemperature: ");
+  Serial.println(sensor.readTemperature(), 2);
+  delay(1000);
+
+  // Toggle heater enabled state every 30 seconds
+  // An ~1.8 degC temperature increase can be noted when heater is enabled
+  if (++loopCnt == 30) {
+    enableHeater = !enableHeater;
+    sensor.heater(enableHeater);
+    Serial.print("Heater Enabled State: ");
+    if (sensor.isHeaterEnabled())
+      Serial.println("ENABLED");
+    else
+      Serial.println("DISABLED");
+       
+    loopCnt = 0;
+  }
 }
