@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <RH_RF95.h>
 #include <SPI.h>
+#include "messages.h"
+
 // Singleton instance of the radio driver
 RH_RF95 rf95;
 float frequency = 868.1;
@@ -30,12 +32,6 @@ void setup() {
   Serial.println(frequency);
 }
 
-struct __attribute__((packed)) msg_t {
-  uint8_t buf[RH_RF95_MAX_MESSAGE_LEN - sizeof(int) - sizeof(int16_t)];
-  int lastSNR;
-  int16_t lastRSSI;
-};
-
 void loop() {
   if (rf95.available()) {
     /*uint8_t data[] = "english or spanish ?";
@@ -44,16 +40,14 @@ void loop() {
     Serial.println("Sent a reply");*/
     // Should be a message for us now
     // uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
-    msg_t msg;
+    weather_data_t msg;
     // memcpy(phrase, msg.buf, 6);
     uint8_t len = sizeof(msg);
     if (rf95.recv((uint8_t *)&msg, &len)) {
       // RH_RF95::printBuffer("request: ", buf, len);
-      Serial.print("got request: ");
-      String a = String((char *)msg.buf);
       // Serial.printf("Values: %d, %d\n", msg.lastRSSI, msg.lastSNR);
-      Serial.println(msg.lastRSSI);
-      Serial.println(msg.lastSNR);
+      Serial.println(msg.temperature);
+      Serial.println(msg.pressure);
       Serial.print((" with an SNR of: "));
       Serial.print(rf95.lastSNR());
       Serial.print((" an RRSI of: "));
