@@ -9,8 +9,8 @@ struct __attribute__((packed)) weather_data_t {
   float si7021_humidity;
   float mpl_pressure;
   float mpl_temperature;
-  int wind_direction;
-  int wind_speed;
-  int rain_fall;
+  float wind_direction;
+  float wind_speed;
+  float rain_fall;
 };
 static_assert(sizeof(weather_data_t) <= (255 - 4), "weather_data_t exceeds lora frame size (??)");
