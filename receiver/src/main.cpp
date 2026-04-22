@@ -17,7 +17,7 @@ void setup() {
   // Setup ISM frequency
   rf95.setFrequency(frequency);
   // Setup Power,dBm
-  rf95.setTxPower(10);
+  rf95.setTxPower(18);
 
   // Setup Spreading Factor
   rf95.setSpreadingFactor(8);
