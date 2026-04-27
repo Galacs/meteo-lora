@@ -48,6 +48,8 @@ void loop() {
       Serial.println(msg.wind_direction);
       Serial.print("Wind speed: ");
       Serial.println(msg.wind_speed);
+      Serial.print("Rain: ");
+      Serial.println(msg.rain_fall);
       Serial.print((" with an SNR of: "));
 
       Serial.print(rf95.lastSNR());
