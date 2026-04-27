@@ -9,8 +9,6 @@ float frequency = 868.1;
 void setup() {
 
   Serial.begin(115200);
-  while (!Serial)
-    ; // Wait for serial port to be available
   Serial.println("Start Sketch");
   if (!rf95.init())
     Serial.println("init failed");
@@ -34,18 +32,9 @@ void setup() {
 
 void loop() {
   if (rf95.available()) {
-    /*uint8_t data[] = "english or spanish ?";
-    rf95.send(data, sizeof(data));
-    rf95.waitPacketSent();
-    Serial.println("Sent a reply");*/
-    // Should be a message for us now
-    // uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
     weather_data_t msg;
-    // memcpy(phrase, msg.buf, 6);
     uint8_t len = sizeof(msg);
     if (rf95.recv((uint8_t *)&msg, &len)) {
-      // RH_RF95::printBuffer("request: ", buf, len);
-      // Serial.printf("Values: %d, %d\n", msg.lastRSSI, msg.lastSNR);
       Serial.print("SI Temperature: ");
       Serial.println(msg.si7021_temperature);
       Serial.print("SI Humidité: ");
@@ -65,17 +54,6 @@ void loop() {
       Serial.print((" an RRSI of: "));
       Serial.println(rf95.lastRssi());
     }
-
-    // Send a reply
-    // uint8_t data[] = "english or spanish ?";
-    // rf95.send((uint8_t *)&msg, sizeof(msg));
-    // Serial.println(("sent"));
-    // rf95.waitPacketSent();
-    // Serial.println("Sent a reply");
-
-    // } else {
-    //   Serial.println("recv failed");
-    // }
   }
   delay(10);
 }
