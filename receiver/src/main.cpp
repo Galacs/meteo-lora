@@ -64,13 +64,7 @@ void callback(char* topic, byte* payload, unsigned int length) { }
 WiFiClientSecure wifiClient;
 PubSubClient client(ENV_MQTT_SERVER, MQTT_PORT, callback, wifiClient);
 
-// SX1262 has the following connections:
-// NSS pin:   10
-// DIO1 pin:  2
-// NRST pin:  3
-// BUSY pin:  9
 SX1262 radio = new Module(LORA_CS_PIN, LORA_DIO1_PIN, LORA_RST_PIN, LORA_BUSY_PIN);
-
 
 void reconnect() {
   while (!client.connected()) {
