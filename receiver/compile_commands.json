@@ -1,7 +1,0 @@
-[
-  {
-    "directory": "/home/galacs/meteo-lora/receiver",
-    "file": "/home/galacs/meteo-lora/receiver/src/main.cpp",
-    "command": "g++ -I/home/galacs/meteo-lora/receiver/include -I/home/galacs/meteo-lora/receiver/src -I/home/galacs/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/galacs/.platformio/packages/framework-arduino-avr/variants/standard -I/home/galacs/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src -I/home/galacs/.platformio/packages/framework-arduino-avr/libraries/HID/src -I/home/galacs/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/galacs/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/galacs/.platformio/packages/framework-arduino-avr/libraries/Wire/src -I/home/galacs/.platformio/packages/toolchain-atmelavr/lib/gcc/avr/7.3.0/include-fixed -I/home/galacs/.platformio/packages/toolchain-atmelavr/lib/gcc/avr/7.3.0/include -I/home/galacs/.platformio/packages/toolchain-atmelavr/avr/include -DPLATFORMIO=60119 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -D__AVR_ATmega328P__ -std=gnu++11 -Wall /home/galacs/meteo-lora/receiver/src/main.cpp"
-  }
-]
