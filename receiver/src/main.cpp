@@ -6,15 +6,7 @@
 #include <WiFi.h>
 #include "messages.h"
 
-// Informations de connection Wifi
-const char* ssid = ENV_WIFI_SSID;
-const char* password = "ndsf2021PS";
-
-// Identifiants serveur MQTT
-const char* mqttServer = "mqtt.weather.ait-younes.fr";
-const int mqttPort = 1883;
-const char* mqttUser = "user";
-const char* mqttPassword = "";
+#define MQTT_PORT 1883
 
 // CA Let's encrypt pour MQTT TLS. cf: https://letsencrypt.org/certificates/
 const char* root_ca = \
@@ -55,14 +47,14 @@ const char* root_ca = \
 void callback(char* topic, byte* payload, unsigned int length) { }
 
 WiFiClientSecure wifiClient;
-PubSubClient client(mqttServer, mqttPort, callback, wifiClient);
+PubSubClient client(ENV_MQTT_SERVER, MQTT_PORT, callback, wifiClient);
 
 void reconnect() {
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
     String clientId = "UPHF1";
     clientId += String(random(0xffff), HEX);
-    if (client.connect(clientId.c_str(), mqttUser, mqttPassword)) {
+    if (client.connect(clientId.c_str(), ENV_MQTT_USERNAME, ENV_MQTT_PASSWORD)) {
       digitalWrite(13, HIGH);
       Serial.println("connected");
     } else {
@@ -82,7 +74,7 @@ void setup() {
   WiFi.setBandMode(WIFI_BAND_MODE_2G_ONLY);
   WiFi.setAutoReconnect(true);
   WiFi.persistent(false);
-  WiFi.begin(ssid, password);
+  WiFi.begin(ENV_WIFI_SSID, ENV_WIFI_PASSWORD);
   // Attendre que le wifi se connecte.
   while(WiFi.status() != WL_CONNECTED) {
     Serial.print(".");
