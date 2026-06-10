@@ -4,6 +4,7 @@
 #include "esp_system.h"
 #include <ArduinoJson.h>
 #include <WiFi.h>
+#include <RadioLib.h>
 #include "messages.h"
 
 #define LORA_RST_PIN 24
@@ -13,7 +14,7 @@
 #define LORA_CS_PIN 3
 #define LORA_SCK_PIN 2
 #define LORA_MISO_PIN 4
-#define LORA_MOSI 5
+#define LORA_MOSI_PIN 5
 
 #define SCL_PIN 6
 #define SDA_PIN 7
@@ -63,6 +64,14 @@ void callback(char* topic, byte* payload, unsigned int length) { }
 WiFiClientSecure wifiClient;
 PubSubClient client(ENV_MQTT_SERVER, MQTT_PORT, callback, wifiClient);
 
+// SX1262 has the following connections:
+// NSS pin:   10
+// DIO1 pin:  2
+// NRST pin:  3
+// BUSY pin:  9
+SX1262 radio = new Module(LORA_CS_PIN, LORA_DIO1_PIN, LORA_RST_PIN, LORA_BUSY_PIN);
+
+
 void reconnect() {
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
@@ -85,6 +94,23 @@ void setup() {
   Serial.begin(115200);
   Serial.println("Start Sketch");
 
+  SPI.begin(LORA_SCK_PIN, LORA_MISO_PIN, LORA_MOSI_PIN);
+
+  // initialize SX1262 at 868.1 MHz
+  Serial.print(F("[SX1262] Initializing ... "));
+  ConfigLoRa_t config;
+  config.frequency = 868.1;
+  int state = radio.begin(config);
+  if (state == RADIOLIB_ERR_NONE) {
+    Serial.println(F("success!"));
+  } else {
+    Serial.print(F("failed, code "));
+    Serial.println(state);
+    while (true) { delay(10); }
+  }
+
+
+  Serial.print(F("[WIFI] Initializing ... "));
   WiFi.setBandMode(WIFI_BAND_MODE_2G_ONLY);
   WiFi.setAutoReconnect(true);
   WiFi.persistent(false);
@@ -114,4 +140,6 @@ void loop() {
   delay(10);
 
   DynamicJsonDocument doc(1024);
+  Serial.print(F("[SX1262] Waiting for incoming transmission ... "));
+  int state = radio.receive((uint8_t*) &msg, sizeof(weather_data_t), 0);
 }
