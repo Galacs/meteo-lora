@@ -142,4 +142,15 @@ void loop() {
   DynamicJsonDocument doc(1024);
   Serial.print(F("[SX1262] Waiting for incoming transmission ... "));
   int state = radio.receive((uint8_t*) &msg, sizeof(weather_data_t), 0);
+  Serial.printf("temp???: ");
+  Serial.println(msg.si7021_temperature);
+  doc["temperature_gxht30"] = 20;
+
+  char buffer[512];
+  size_t n = serializeJson(doc, buffer);
+  Serial.println(buffer);
+  if (!client.connected()) {
+    reconnect();
+  }
+  client.publish("weather/uphf1", buffer, n);
 }
