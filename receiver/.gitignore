@@ -7,4 +7,3 @@
 .gcc-flags.json
 .ccls
 .cache/
-.env
