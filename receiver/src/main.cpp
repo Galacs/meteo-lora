@@ -91,10 +91,13 @@ void setup() {
   wifiClient.setCACert(root_ca); // CA
   // wifiClient.setInsecure(); // Pour desactiver la verification de CA
   reconnect();
+  client.setBufferSize(512);
 }
 
 void loop() {
   weather_data_t msg;
   uint8_t len = sizeof(msg);
   delay(10);
+
+  DynamicJsonDocument doc(1024);
 }
