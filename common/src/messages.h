@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Arduino.h>
-#include <RH_RF95.h>
 
 struct __attribute__((packed)) weather_data_t {
   static constexpr int ID = 10;
