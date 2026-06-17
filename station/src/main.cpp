@@ -2,7 +2,8 @@
 #include "messages.h"
 #include <SPI.h>
 #include <SparkFun_Weather_Meter_Kit_Arduino_Library.h>
-#include "MS5611.h"
+#include <MS5611.h>
+#include <Adafruit_SHT31.h>
 #include <Wire.h>
 #include <SPI.h>
 #include <HTU21D.h>
@@ -48,6 +49,7 @@ HTU21D_RES_RH11_TEMP11 - RH: 11Bit, Temperature: 11Bit
 */
 HTU21D myHTU21D(HTU21D_RES_RH12_TEMP14);
 MS5611 MS5607(0x77);
+Adafruit_SHT31 sht31 = Adafruit_SHT31();
 
 bool enableHeater = false;
 uint8_t loopCnt = 0;
@@ -76,19 +78,31 @@ void setup() {
   if (MS5607.begin() == true)
   {
     printf("MS5607 found: ");
-    printf("%d", MS5607.getAddress(), "\n");
+    printf("%d\n", MS5607.getAddress());
   }
   else
   {
-    printf("MS5607 not found. halt. \n");
+    printf("MS5607 not found. halt.\n");
     while (1);
   }
 
    while (myHTU21D.begin() != true)
   {
-    printf("HTU21D, SHT21 sensor is faild or not connected \n"); //(F()) saves string to flash & keeps dynamic memory free
+    printf("HTU21D, SHT21 sensor is faild or not connected\n"); //(F()) saves string to flash & keeps dynamic memory free
     delay(5000);
   }
+
+    if (!sht31.begin(0x44)) {   // Set to 0x45 for alternate i2c addr
+      printf("Couldn't find SHT31\n");
+    while (1) delay(1);
+  }
+
+  printf("Heater Enabled State: ");
+  if (sht31.isHeaterEnabled())
+    printf("ENABLED\n");
+  else
+    printf("DISABLED\n");
+
   printf("HTU21D, SHT21 sensor is active \n");
   pinMode(STATUS_PIN, OUTPUT);
 
@@ -119,6 +133,8 @@ void loop() {
     msg.HTU21D_temperature = myHTU21D.readTemperature();
     msg.HTU21D_humidity = myHTU21D.readHumidity();
     msg.HTU21D_compensed_humidity = myHTU21D.readCompensatedHumidity();
+    msg.GXHT30_temperature = sht31.readTemperature();
+    msg.GXHT30_humidity = sht31.readHumidity();
 
     char buf[10];
     dtostrf(msg.MS5607_temperature, 3, 2, buf);
@@ -128,6 +144,8 @@ void loop() {
     dtostrf(msg.HTU21D_humidity, 3, 2, buf);
     printf("a: %s\n", buf);
     dtostrf(msg.HTU21D_temperature, 3, 2, buf);
+    printf("a: %s\n", buf);
+    dtostrf(msg.GXHT30_temperature, 3, 2, buf);
     printf("a: %s\n", buf);
 
     radio.transmit((uint8_t *)&msg, sizeof(msg));
