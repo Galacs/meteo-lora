@@ -47,7 +47,7 @@ HTU21D_RES_RH10_TEMP13 - RH: 10Bit, Temperature: 13Bit
 HTU21D_RES_RH11_TEMP11 - RH: 11Bit, Temperature: 11Bit
 */
 HTU21D myHTU21D(HTU21D_RES_RH12_TEMP14);
-MS5611 MS5607(0x76);
+MS5611 MS5607(0x77);
 
 bool enableHeater = false;
 uint8_t loopCnt = 0;
@@ -59,9 +59,9 @@ void setup() {
   SPI.setMISO(LORA_MISO_PIN);
   SPI.setMOSI(LORA_MOSI);
   SPI.setSCLK(LORA_SCK_PIN);
-  int state = radio.begin(868);
+  int state = radio.begin(868.1);
   if (state == RADIOLIB_ERR_NONE) {
-    printf("success!");
+    printf("lora success!\n");
   } else {
     printf("failed, code: %d \n", state);
 
@@ -70,24 +70,26 @@ void setup() {
 
   weatherMeterKit.begin();
 
+  Wire.setSCL(SCL_PIN);
+  Wire.setSDA(SDA_PIN);
   Wire.begin();
-  // if (MS5607.begin() == true)
-  // {
-  //   printf("MS5607 found: ");
-  //   printf("%d", MS5607.getAddress(), "\n");
-  // }
-  // else
-  // {
-  //   printf("MS5607 not found. halt. \n");
-  //   while (1);
-  // }
+  if (MS5607.begin() == true)
+  {
+    printf("MS5607 found: ");
+    printf("%d", MS5607.getAddress(), "\n");
+  }
+  else
+  {
+    printf("MS5607 not found. halt. \n");
+    while (1);
+  }
 
-  //  while (myHTU21D.begin() != true)
-  // {
-  //   printf("HTU21D, SHT21 sensor is faild or not connected \n"); //(F()) saves string to flash & keeps dynamic memory free
-  //   delay(5000);
-  // }
-  // printf("HTU21D, SHT21 sensor is active \n");
+   while (myHTU21D.begin() != true)
+  {
+    printf("HTU21D, SHT21 sensor is faild or not connected \n"); //(F()) saves string to flash & keeps dynamic memory free
+    delay(5000);
+  }
+  printf("HTU21D, SHT21 sensor is active \n");
   pinMode(STATUS_PIN, OUTPUT);
 
 }
@@ -107,18 +109,26 @@ extern "C" int _write(int file, char *data, int len) {
 bool a = false;
 void loop() {
   if (true) {
-    // MS5607.read();
+    MS5607.read();
     weather_data_t msg;
-    msg.MS5607_temperature = 25.0;
-    // msg.wind_direction = weatherMeterKit.getWindDirection();
-    // msg.wind_speed = weatherMeterKit.getWindSpeed();
-    // msg.rain_fall = weatherMeterKit.getTotalRainfall();
-    // msg.MS5607_temperature = MS5607.getTemperature();
-    // msg.MS5607_pressure = MS5607.getPressure();
-    // msg.HTU21D_temperature = myHTU21D.readTemperature();
-    // msg.HTU21D_humidity = myHTU21D.readHumidity();
-    // msg.HTU21D_compensed_humidity = myHTU21D.readCompensatedHumidity();
+    msg.wind_direction = weatherMeterKit.getWindDirection();
+    msg.wind_speed = weatherMeterKit.getWindSpeed();
+    msg.rain_fall = weatherMeterKit.getTotalRainfall();
+    msg.MS5607_temperature = MS5607.getTemperature();
+    msg.MS5607_pressure = MS5607.getPressure();
+    msg.HTU21D_temperature = myHTU21D.readTemperature();
+    msg.HTU21D_humidity = myHTU21D.readHumidity();
+    msg.HTU21D_compensed_humidity = myHTU21D.readCompensatedHumidity();
 
+    char buf[10];
+    dtostrf(msg.MS5607_temperature, 3, 2, buf);
+    printf("a: %s\n", buf);
+    dtostrf(msg.wind_speed, 3, 2, buf);
+    printf("a: %s\n", buf);
+    dtostrf(msg.HTU21D_humidity, 3, 2, buf);
+    printf("a: %s\n", buf);
+    dtostrf(msg.HTU21D_temperature, 3, 2, buf);
+    printf("a: %s\n", buf);
 
     radio.transmit((uint8_t *)&msg, sizeof(msg));
   
