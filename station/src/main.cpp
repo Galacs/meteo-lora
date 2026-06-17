@@ -4,6 +4,7 @@
 #include <SparkFun_Weather_Meter_Kit_Arduino_Library.h>
 #include "MS5611.h"
 #include <Wire.h>
+#include <SPI.h>
 #include <HTU21D.h>
 #include <RadioLib.h>
 #include <sys/unistd.h>
@@ -46,7 +47,7 @@ HTU21D_RES_RH10_TEMP13 - RH: 10Bit, Temperature: 13Bit
 HTU21D_RES_RH11_TEMP11 - RH: 11Bit, Temperature: 11Bit
 */
 HTU21D myHTU21D(HTU21D_RES_RH12_TEMP14);
-MS5611 MS5607(0x77);
+MS5611 MS5607(0x76);
 
 bool enableHeater = false;
 uint8_t loopCnt = 0;
@@ -54,14 +55,11 @@ uint8_t loopCnt = 0;
 SFEWeatherMeterKit weatherMeterKit(windDirectionPin, windSpeedPin, rainfallPin);
 // Singleton instance of the radio driver
 
-  
-
-
-
-
-
 void setup() {
-    int state = radio.begin(868.1);
+  SPI.setMISO(LORA_MISO_PIN);
+  SPI.setMOSI(LORA_MOSI);
+  SPI.setSCLK(LORA_SCK_PIN);
+  int state = radio.begin(868);
   if (state == RADIOLIB_ERR_NONE) {
     printf("success!");
   } else {
@@ -69,26 +67,28 @@ void setup() {
 
     while (true) { delay(10); }
   }
+
   weatherMeterKit.begin();
 
-   Wire.begin();
-  if (MS5607.begin() == true)
-  {
-    printf("MS5607 found: ");
-    printf("%d", MS5607.getAddress(), "\n");
-  }
-  else
-  {
-    printf("MS5607 not found. halt. \n");
-    while (1);
-  }
+  Wire.begin();
+  // if (MS5607.begin() == true)
+  // {
+  //   printf("MS5607 found: ");
+  //   printf("%d", MS5607.getAddress(), "\n");
+  // }
+  // else
+  // {
+  //   printf("MS5607 not found. halt. \n");
+  //   while (1);
+  // }
 
-   while (myHTU21D.begin() != true)
-  {
-    printf("HTU21D, SHT21 sensor is faild or not connected \n"); //(F()) saves string to flash & keeps dynamic memory free
-    delay(5000);
-  }
-  printf("HTU21D, SHT21 sensor is active \n");
+  //  while (myHTU21D.begin() != true)
+  // {
+  //   printf("HTU21D, SHT21 sensor is faild or not connected \n"); //(F()) saves string to flash & keeps dynamic memory free
+  //   delay(5000);
+  // }
+  // printf("HTU21D, SHT21 sensor is active \n");
+  pinMode(STATUS_PIN, OUTPUT);
 
 }
 
@@ -104,24 +104,28 @@ extern "C" int _write(int file, char *data, int len) {
   }
   return len;
   }
-
+bool a = false;
 void loop() {
   if (true) {
-    MS5607.read();
+    // MS5607.read();
     weather_data_t msg;
-    msg.wind_direction = weatherMeterKit.getWindDirection();
-    msg.wind_speed = weatherMeterKit.getWindSpeed();
-    msg.rain_fall = weatherMeterKit.getTotalRainfall();
-    msg.MS5607_temperature = MS5607.getTemperature();
-    msg.MS5607_pressure = MS5607.getPressure();
-    msg.HTU21D_temperature = myHTU21D.readTemperature();
-    msg.HTU21D_humidity = myHTU21D.readHumidity();
-    msg.HTU21D_compensed_humidity = myHTU21D.readCompensatedHumidity();
+    msg.MS5607_temperature = 25.0;
+    // msg.wind_direction = weatherMeterKit.getWindDirection();
+    // msg.wind_speed = weatherMeterKit.getWindSpeed();
+    // msg.rain_fall = weatherMeterKit.getTotalRainfall();
+    // msg.MS5607_temperature = MS5607.getTemperature();
+    // msg.MS5607_pressure = MS5607.getPressure();
+    // msg.HTU21D_temperature = myHTU21D.readTemperature();
+    // msg.HTU21D_humidity = myHTU21D.readHumidity();
+    // msg.HTU21D_compensed_humidity = myHTU21D.readCompensatedHumidity();
 
 
     radio.transmit((uint8_t *)&msg, sizeof(msg));
   
     printf("sent \n");
-    delay(1000);
+    delay(500);
+    digitalWrite(STATUS_PIN, a);
+    a != a;
+    delay(500);
   }
 }
