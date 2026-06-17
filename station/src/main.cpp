@@ -6,7 +6,8 @@
 #include <Wire.h>
 #include <HTU21D.h>
 #include <RadioLib.h>
-
+#include <sys/unistd.h>
+#include <errno.h>
 
 #define LORA_RST_PIN PB0
 #define LORA_DIO1_PIN PB1
@@ -58,45 +59,51 @@ SFEWeatherMeterKit weatherMeterKit(windDirectionPin, windSpeedPin, rainfallPin);
 
 
 
+
 void setup() {
-  ConfigLoRa_t config;
-  config.frequency = 868.1;
-  int state = radio.begin(config);
+    int state = radio.begin(868.1);
   if (state == RADIOLIB_ERR_NONE) {
-    Serial.println(F("success!"));
+    printf("success!");
   } else {
-    Serial.print(F("failed, code "));
-    Serial.println(state);
+    printf("failed, code: %d \n", state);
+
     while (true) { delay(10); }
   }
   weatherMeterKit.begin();
-  Serial.begin(115200);
-  Serial.println("Start Sketch");
-  
-
-  
 
    Wire.begin();
   if (MS5607.begin() == true)
   {
-    Serial.print("MS5607 found: ");
-    Serial.println(MS5607.getAddress());
+    printf("MS5607 found: ");
+    printf("%d", MS5607.getAddress(), "\n");
   }
   else
   {
-    Serial.println("MS5607 not found. halt.");
+    printf("MS5607 not found. halt. \n");
     while (1);
   }
-  Serial.println();
 
    while (myHTU21D.begin() != true)
   {
-    Serial.println(F("HTU21D, SHT21 sensor is faild or not connected")); //(F()) saves string to flash & keeps dynamic memory free
+    printf("HTU21D, SHT21 sensor is faild or not connected \n"); //(F()) saves string to flash & keeps dynamic memory free
     delay(5000);
   }
-  Serial.println(F("HTU21D, SHT21 sensor is active"));
+  printf("HTU21D, SHT21 sensor is active \n");
 
 }
+
+
+extern "C" int _write(int file, char *data, int len) {
+  if ((file != STDOUT_FILENO) && (file != STDERR_FILENO)) {
+    errno = EBADF;
+    return -1;
+  }
+
+  for (int i = 0; i < len; i++) {
+    ITM_SendChar(data[i]);
+  }
+  return len;
+  }
 
 void loop() {
   if (true) {
@@ -114,7 +121,7 @@ void loop() {
 
     radio.transmit((uint8_t *)&msg, sizeof(msg));
   
-    Serial.println(("sent"));
+    printf("sent \n");
     delay(1000);
   }
 }
