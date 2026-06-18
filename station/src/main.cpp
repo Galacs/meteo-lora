@@ -61,7 +61,14 @@ void setup() {
   SPI.setMISO(LORA_MISO_PIN);
   SPI.setMOSI(LORA_MOSI);
   SPI.setSCLK(LORA_SCK_PIN);
-  int state = radio.begin(868.1);
+
+  ConfigLoRa_t config;
+  config.frequency = 868.1;
+  config.codingRate = 5;
+  config.spreadingFactor = 8;
+  config.power = 22;
+
+  int state = radio.begin(config);
   if (state == RADIOLIB_ERR_NONE) {
     printf("lora success!\n");
   } else {

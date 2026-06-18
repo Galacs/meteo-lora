@@ -115,6 +115,7 @@ void setup() {
   // Attendre que le wifi se connecte.
   while(WiFi.status() != WL_CONNECTED) {
     Serial.print(".");
+    delay(100);
     // digitalWrite(12, HIGH);
     // delay(150);
     // digitalWrite(12, LOW);
@@ -125,7 +126,7 @@ void setup() {
   Serial.print("Local ESP32 IP: ");
   Serial.println(WiFi.localIP());
   configTime(1 * 60 * 60, 0, "pool.ntp.org", "0.fr.pool.ntp.org", "2.fr.pool.ntp.org"); // Configuration de l'horloge pour TLS
-  wifiClient.setCACert(root_ca); // CA
+  // wifiClient.setCACert(root_ca); // CA
   wifiClient.setInsecure(); // Pour desactiver la verification de CA
   reconnect();
   client.setBufferSize(512);
