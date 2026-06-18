@@ -7,14 +7,14 @@
 #include <RadioLib.h>
 #include "messages.h"
 
-#define LORA_RST_PIN 24
-#define LORA_DIO1_PIN 25
-#define LORA_BUSY_PIN 27
+#define LORA_RST_PIN 05
+#define LORA_DIO1_PIN 19
+#define LORA_BUSY_PIN 21
 #define LORA_DIO3_PIN 26
-#define LORA_CS_PIN 3
-#define LORA_SCK_PIN 2
-#define LORA_MISO_PIN 4
-#define LORA_MOSI_PIN 5
+#define LORA_CS_PIN 25
+#define LORA_SCK_PIN 18
+#define LORA_MISO_PIN 17
+#define LORA_MOSI_PIN 23
 
 #define SCL_PIN 6
 #define SDA_PIN 7
@@ -94,6 +94,9 @@ void setup() {
   Serial.print(F("[SX1262] Initializing ... "));
   ConfigLoRa_t config;
   config.frequency = 868.1;
+  config.codingRate = 5;
+  config.spreadingFactor = 8;
+  config.power = 22;
   int state = radio.begin(config);
   if (state == RADIOLIB_ERR_NONE) {
     Serial.println(F("success!"));
@@ -112,18 +115,18 @@ void setup() {
   // Attendre que le wifi se connecte.
   while(WiFi.status() != WL_CONNECTED) {
     Serial.print(".");
-    digitalWrite(12, HIGH);
-    delay(150);
-    digitalWrite(12, LOW);
-    delay(50);
+    // digitalWrite(12, HIGH);
+    // delay(150);
+    // digitalWrite(12, LOW);
+    // delay(50);
   }
-  digitalWrite(12, HIGH);
+  // digitalWrite(12, HIGH);
   Serial.println("\nConnected to the WiFi network");
   Serial.print("Local ESP32 IP: ");
   Serial.println(WiFi.localIP());
   configTime(1 * 60 * 60, 0, "pool.ntp.org", "0.fr.pool.ntp.org", "2.fr.pool.ntp.org"); // Configuration de l'horloge pour TLS
   wifiClient.setCACert(root_ca); // CA
-  // wifiClient.setInsecure(); // Pour desactiver la verification de CA
+  wifiClient.setInsecure(); // Pour desactiver la verification de CA
   reconnect();
   client.setBufferSize(512);
 }
