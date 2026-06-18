@@ -72,7 +72,7 @@ void reconnect() {
     String clientId = "UPHF1";
     clientId += String(random(0xffff), HEX);
     if (client.connect(clientId.c_str(), ENV_MQTT_USERNAME, ENV_MQTT_PASSWORD)) {
-      digitalWrite(13, HIGH);
+      // digitalWrite(13, HIGH);
       Serial.println("connected");
     } else {
       Serial.print("failed, rc=");
@@ -126,6 +126,14 @@ void setup() {
   Serial.print("Local ESP32 IP: ");
   Serial.println(WiFi.localIP());
   configTime(1 * 60 * 60, 0, "pool.ntp.org", "0.fr.pool.ntp.org", "2.fr.pool.ntp.org"); // Configuration de l'horloge pour TLS
+  Serial.print("Waiting for NTP time sync...");
+  time_t now = 0;
+  while (now < 1000000000) {
+    delay(500);
+    Serial.print(".");
+    time(&now);
+  }
+  Serial.println("\nTime synced");
   // wifiClient.setCACert(root_ca); // CA
   wifiClient.setInsecure(); // Pour desactiver la verification de CA
   reconnect();
