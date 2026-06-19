@@ -2,7 +2,7 @@
 #include "messages.h"
 #include <SPI.h>
 #include <SparkFun_Weather_Meter_Kit_Arduino_Library.h>
-#include <MS5611.h>
+#include <MS5xxx.h>
 #include <Adafruit_SHT31.h>
 #include <Wire.h>
 #include <SPI.h>
@@ -48,7 +48,7 @@ HTU21D_RES_RH10_TEMP13 - RH: 10Bit, Temperature: 13Bit
 HTU21D_RES_RH11_TEMP11 - RH: 11Bit, Temperature: 11Bit
 */
 HTU21D myHTU21D(HTU21D_RES_RH12_TEMP14);
-MS5611 MS5607(0x77);
+MS5xxx MS5607(&Wire);
 Adafruit_SHT31 sht31 = Adafruit_SHT31();
 
 bool enableHeater = false;
@@ -82,10 +82,12 @@ void setup() {
   Wire.setSCL(SCL_PIN);
   Wire.setSDA(SDA_PIN);
   Wire.begin();
-  if (MS5607.begin() == true)
+
+  MS5607.setI2Caddr(0x77);
+  if (!MS5607.connect())
   {
-    printf("MS5607 found: ");
-    printf("%d\n", MS5607.getAddress());
+    printf("MS5607 found.\n");
+    // printf("%d\n", MS5607.getAddress());
   }
   else
   {
@@ -130,13 +132,14 @@ extern "C" int _write(int file, char *data, int len) {
 bool a = false;
 void loop() {
   if (true) {
-    MS5607.read();
+    MS5607.ReadProm();
+    MS5607.Readout();
     weather_data_t msg;
     msg.wind_direction = weatherMeterKit.getWindDirection();
     msg.wind_speed = weatherMeterKit.getWindSpeed();
     msg.rain_fall = weatherMeterKit.getTotalRainfall();
-    msg.MS5607_temperature = MS5607.getTemperature();
-    msg.MS5607_pressure = MS5607.getPressure();
+    msg.MS5607_temperature = MS5607.GetTemp();
+    msg.MS5607_pressure = MS5607.GetPres();
     msg.HTU21D_temperature = myHTU21D.readTemperature();
     msg.HTU21D_humidity = myHTU21D.readHumidity();
     msg.HTU21D_compensed_humidity = myHTU21D.readCompensatedHumidity();
