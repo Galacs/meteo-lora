@@ -128,11 +128,11 @@ void setup() {
   configTime(1 * 60 * 60, 0, "pool.ntp.org", "0.fr.pool.ntp.org", "2.fr.pool.ntp.org"); // Configuration de l'horloge pour TLS
   Serial.print("Waiting for NTP time sync...");
   time_t now = 0;
-  while (now < 1000000000) {
-    delay(500);
-    Serial.print(".");
-    time(&now);
-  }
+  // while (now < 1000000000) {
+  //   delay(500);
+  //   Serial.print(".");
+  //   time(&now);
+  // }
   Serial.println("\nTime synced");
   // wifiClient.setCACert(root_ca); // CA
   wifiClient.setInsecure(); // Pour desactiver la verification de CA
@@ -161,6 +161,9 @@ void loop() {
   doc["humidity_htu21d_comp"] = msg.HTU21D_compensed_humidity;
   doc["temperature_gxht30"] = msg.GXHT30_temperature;
   doc["humidity_gxht30"] = msg.GXHT30_humidity;
+  doc["wifi_esp32"] = WiFi.RSSI();
+  doc["lora_rssi_sx1262"] = radio.getRSSI();
+  doc["lora_snr_sx1262"] = radio.getSNR();
 
   char buffer[512];
   size_t n = serializeJson(doc, buffer);
