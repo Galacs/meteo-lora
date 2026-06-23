@@ -54,12 +54,13 @@ Adafruit_SHT31 sht31 = Adafruit_SHT31();
 Adafruit_BQ25798 bq;
 
 bool enableHeater = false;
-uint8_t loopCnt = 0;
 
 SFEWeatherMeterKit weatherMeterKit(windDirectionPin, windSpeedPin, rainfallPin);
 // Singleton instance of the radio driver
 
 void setup() {
+  pinMode(STATUS_PIN, OUTPUT);
+  digitalWrite(STATUS_PIN, HIGH);
   SPI.setMISO(LORA_MISO_PIN);
   SPI.setMOSI(LORA_MOSI);
   SPI.setSCLK(LORA_SCK_PIN);
@@ -116,7 +117,6 @@ void setup() {
     printf("DISABLED\n");
 
   printf("HTU21D, SHT21 sensor is active \n");
-  pinMode(STATUS_PIN, OUTPUT);
 
   // Charger
   if (!bq.begin()) {
@@ -369,7 +369,7 @@ extern "C" int _write(int file, char *data, int len) {
   }
   return len;
   }
-bool a = false;
+
 void loop() {
   if (true) {
     MS5607.ReadProm();
@@ -402,8 +402,9 @@ void loop() {
   
     printf("sent \n");
     delay(5000);
-    digitalWrite(STATUS_PIN, a);
-    a != a;
-    delay(5000);
+    digitalWrite(STATUS_PIN, HIGH);
+    delay(100);
+    digitalWrite(STATUS_PIN, LOW);
+    delay(5000-100);
   }
 }
