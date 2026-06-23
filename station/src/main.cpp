@@ -118,12 +118,12 @@ void setup() {
   pinMode(STATUS_PIN, OUTPUT);
 
   // Charger
-  // if (!bq.begin()) {
-  //   printf("Could not find a valid BQ25798 sensor, check wiring!\n");
-  //   while (1);
-  // }
-  // printf("BQ25798 found!\n");
-  // char bqbuf[10];
+  if (!bq.begin()) {
+    printf("Could not find a valid BQ25798 sensor, check wiring!\n");
+    while (1);
+  }
+  printf("BQ25798 found!\n");
+  char bqbuf[10];
 
   // dtostrf(bq.getMinSystemV(), 3, 2, bqbuf);
   // printf("Minimal system voltage: %s V\n", bqbuf);
@@ -134,8 +134,8 @@ void setup() {
   // dtostrf(bq.getChargeLimitA(), 3, 2, bqbuf);
   // printf("Charge current limit: %s A\n", bqbuf);
 
-  // dtostrf(bq.getInputLimitV(), 3, 2, bqbuf);
-  // printf("Input voltage limit: %s V\n", bqbuf);
+  dtostrf(bq.getInputLimitV(), 3, 2, bqbuf);
+  printf("Input voltage limit: %s V\n", bqbuf);
 
   // dtostrf(bq.getInputLimitA(), 3, 2, bqbuf);
   // printf("Input current limit: %s A\n", bqbuf);
@@ -328,7 +328,8 @@ void setup() {
   //   case BQ25798_VOC_RATE_30MIN: printf("30 minutes\n"); break;
   // }
 
-  // printf("MPPT enabled: %s\n", bq.getMPPTenable() ? "true" : "false");
+  bq.setMPPTenable(true);
+  printf("MPPT enabled: %s\n", bq.getMPPTenable() ? "true" : "false");
 
   // printf("Thermal regulation threshold: ");
   // switch (bq.getThermRegulationThresh()) {
