@@ -69,6 +69,7 @@ void setup() {
   config.codingRate = 5;
   config.spreadingFactor = 8;
   config.power = 22;
+  config.syncWord = 69;
 
   int state = radio.begin(config);
   if (state == RADIOLIB_ERR_NONE) {
