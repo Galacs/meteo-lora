@@ -399,9 +399,9 @@ void loop() {
     radio.transmit((uint8_t *)&msg, sizeof(msg));
   
     printf("sent \n");
-    delay(500);
+    delay(5000);
     digitalWrite(STATUS_PIN, a);
     a != a;
-    delay(500);
+    delay(5000);
   }
 }
