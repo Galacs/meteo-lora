@@ -378,7 +378,7 @@ void loop() {
     msg.wind_direction = weatherMeterKit.getWindDirection();
     msg.wind_speed = weatherMeterKit.getWindSpeed();
     msg.rain_fall = weatherMeterKit.getTotalRainfall();
-    msg.MS5607_temperature = MS5607.GetTemp();
+    msg.MS5607_temperature = MS5607.GetTemp()/100;
     msg.MS5607_pressure = MS5607.GetPres();
     msg.HTU21D_temperature = myHTU21D.readTemperature();
     msg.HTU21D_humidity = myHTU21D.readHumidity();
